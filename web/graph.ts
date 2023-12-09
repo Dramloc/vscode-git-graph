@@ -358,7 +358,7 @@ class Graph {
 
 	private tooltipId: number = -1;
 	private tooltipElem: HTMLElement | null = null;
-	private tooltipTimeout: NodeJS.Timer | null = null;
+	private tooltipTimeout: number | null = null;
 	private tooltipVertex: HTMLElement | null = null;
 
 	constructor(id: string, viewElem: HTMLElement, config: GG.GraphConfig, muteConfig: GG.MuteCommitsConfig) {
@@ -786,7 +786,7 @@ class Graph {
 		if (commitElem !== null) commitElem.classList.add(CLASS_GRAPH_VERTEX_ACTIVE);
 
 		if (id < this.commits.length && this.commits[id].hash !== UNCOMMITTED) { // Only show tooltip for commits (not the uncommitted changes)
-			this.tooltipTimeout = setTimeout(() => {
+			this.tooltipTimeout = window.setTimeout(() => {
 				this.tooltipTimeout = null;
 				let vertexScreenY = vertexElem.getBoundingClientRect().top + 4; // Get center of the circle
 				if (vertexScreenY >= 5 && vertexScreenY <= this.viewElem.clientHeight - 5) {
@@ -901,7 +901,7 @@ class Graph {
 		}
 
 		if (this.tooltipTimeout !== null) {
-			clearTimeout(this.tooltipTimeout);
+			window.clearTimeout(this.tooltipTimeout);
 			this.tooltipTimeout = null;
 		}
 

@@ -596,7 +596,7 @@ export function evalPromises<X, Y>(data: X[], maxParallel: number, createPromise
  */
 export function resolveSpawnOutput(cmd: cp.ChildProcess) {
 	return Promise.all([
-		new Promise<{ code: number, error: Error | null }>((resolve) => {
+		new Promise<{ code: number | null, error: Error | null }>((resolve) => {
 			// status promise
 			let resolved = false;
 			cmd.on('error', (error) => {
@@ -611,12 +611,14 @@ export function resolveSpawnOutput(cmd: cp.ChildProcess) {
 			});
 		}),
 		new Promise<Buffer>((resolve) => {
+			if (!cmd.stdout) return resolve(Buffer.alloc(0));
 			// stdout promise
 			let buffers: Buffer[] = [];
 			cmd.stdout.on('data', (b: Buffer) => { buffers.push(b); });
 			cmd.stdout.on('close', () => resolve(Buffer.concat(buffers)));
 		}),
 		new Promise<string>((resolve) => {
+			if (!cmd.stderr) return resolve('');
 			// stderr promise
 			let stderr = '';
 			cmd.stderr.on('data', (d) => { stderr += d; });

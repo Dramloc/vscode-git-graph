@@ -1996,7 +1996,7 @@ class GitGraphView {
 	}
 
 	private observeViewScroll() {
-		let active = this.viewElem.scrollTop > 0, timeout: NodeJS.Timer | null = null;
+		let active = this.viewElem.scrollTop > 0, timeout: number | null = null;
 		this.scrollShadowElem.className = active ? CLASS_ACTIVE : '';
 		this.viewElem.addEventListener('scroll', () => {
 			const scrollTop = this.viewElem.scrollTop;
@@ -2013,8 +2013,8 @@ class GitGraphView {
 				}
 			}
 
-			if (timeout !== null) clearTimeout(timeout);
-			timeout = setTimeout(() => {
+			if (timeout !== null) window.clearTimeout(timeout);
+			timeout = window.setTimeout(() => {
 				this.scrollTop = scrollTop;
 				this.saveState();
 				timeout = null;
