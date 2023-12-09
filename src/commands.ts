@@ -104,10 +104,10 @@ export class CommandManager extends Disposable {
 	 * The method run when the `git-graph.view` command is invoked.
 	 * @param arg An optional argument passed to the command (when invoked from the Visual Studio Code Git Extension).
 	 */
-	private async view(arg: any) {
+	private async view(arg: unknown) {
 		let loadRepo: string | null = null;
 
-		if (typeof arg === 'object' && arg.rootUri) {
+		if (typeof arg === 'object' && arg !== null && 'rootUri' in arg && arg.rootUri instanceof vscode.Uri) {
 			// If command is run from the Visual Studio Code Source Control View, load the specific repo
 			const repoPath = getPathFromUri(arg.rootUri);
 			loadRepo = await this.repoManager.getKnownRepo(repoPath);
